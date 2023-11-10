@@ -14,6 +14,21 @@ Internet Gateway __AND__ you have to have an account for Hargassner WEB-APP / AP
 * Python code  of `hargassner_web_api_pull` retrieves data and stores it into InfluxDB
 * Data is visualized with Grafana Dashboards
 
+# Usage
+
+* Rename `config_template.yml` to `config.yml` and fill in required information
+
+## In case you get 401 during Hargassner login and you are sure that user / password are correct
+
+To log into the Hargassner web API one also needs `client_id` and `client_secret`. This is configured
+in `config.yml` and usually does not need to be changed. If you think you need to change it, follow
+this procedure:
+
+1. Open https://web.hargassner.at in browser
+2. Open the network analysis console of the browser (F12 in Firefox, tab "Network analysis")
+3. Log into the web application with your user / password
+4. Find the `POST https://web.hargassner.at/api/auth/login` call in the trace
+5. Switch to the `Request` tab copy values from the variables `client_id` and `client_secret`
 
 
 
@@ -50,21 +65,22 @@ Defines the mapping of the string values for the status into numeric values for 
 | STATE_OFF | Aus | 0 |
 | STATE_IGNITION | Zündung | 1 |
 | STATE_EFFICIENCY_FIRE | Leistungsbrand | 2 |
+| STATE_DEASHING | Entaschung | 3 |
 
 ### Buffer (Pufferspeicher) states
 
 | State name | German meaning | Numberic value |
 | --- | --- | --- |
-| STATE_CHARGING | Ladung Puffer | ? |
-| STATE_ON | ?? | ? |
+| STATE_CHARGING | Ladung Puffer | 10 |
+| STATE_ON | ?? | 11 |
 
 ### Heating Circuit (Heizkreis) states
 
 | State name | German meaning | Numberic value |
 | --- | --- | --- |
 | STATE_OFF | Aus | 0 |
-| STATE_HEATING | Heizen | ? |
-| STATE_REDUCTION_TRANSITION | Absenken Rampe | ?
+| STATE_HEATING | Heizen | 20 |
+| STATE_REDUCTION_TRANSITION | Absenken Rampe | 21 |
 
 
 

@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "hargassner-web-api-pull"
+version = "0.1.0"
+description = ""
+authors = ["Oliver Graebner <oliver.graebner@zohomail.eu>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+influxdb-client = {extras = ["ciso"], version = "^1.38.0"}
+requests = "^2.31.0"
+pyyaml = "^6.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

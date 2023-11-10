@@ -1,5 +1,6 @@
 # exlude private stuff
 _private/
+config.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

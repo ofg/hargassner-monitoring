@@ -1,0 +1,20 @@
+
+
+# may be either DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_level: DEBUG
+
+hargassner_web:
+  email: "your-login-email"
+  password: "your-password"
+  url: "https://web.hargassner.at"
+  # don't change the next two lines EXCEPT if you have read and understood README 
+  client_id: 1
+  client_secret: "aSYsAYj7Gsl5v9tPEDdS1hhXTUezgJk1NhOZ1bHR"
+
+influxdb:
+  url: "http://localhost:8086"
+  access_token: "your-access-token"
+  org: "your-org-name"
+  bucket_name: "your-bucket-name"
+
+    
