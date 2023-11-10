@@ -1,10 +1,12 @@
 # hargassner-monitoring
 Monitoring of Hargassner heating while pulling data from Hargassner Web-API.
 
-# Precondition
+# Preconditions
 
-Data of your Hargassner heating installation has to be send to Hargassner via an 
+* Data of your Hargassner heating installation has to be send to Hargassner via an 
 Internet Gateway __AND__ you have to have an account for Hargassner WEB-APP / APP.
+* Have [Required SW](#required-sw) installed.
+* Access to an InfluxDB instance.
 
 # System Deployment
 
@@ -40,7 +42,8 @@ this procedure:
 
 * Python 3
 * Poetry
-* InfluxDB V2: I used the [manual installation option](https://docs.influxdata.com/influxdb/v2/install/?t=Linux#manually-download-and-install-the-influxd-binary), for development.
+* InfluxDB V2: I used the [manual installation option](https://docs.influxdata.com/influxdb/v2/install/?t=Linux#manually-download-and-install-the-influxd-binary), for development. For production data
+you should consider a different setup!
 
 ## InfluxDB
 
