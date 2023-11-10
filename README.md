@@ -17,6 +17,10 @@ Internet Gateway __AND__ you have to have an account for Hargassner WEB-APP / AP
 # Usage
 
 * Rename `config_template.yml` to `config.yml` and fill in required information
+* Install dependencies with `poetry install`
+* Execute:
+  * Single run: execute `poetry run python hargassner_web_api_pull/hg_data_pull.py`
+  * Run it in a shell-loop every two minutes: `./pull_data.sh`
 
 ## In case you get 401 during Hargassner login and you are sure that user / password are correct
 
