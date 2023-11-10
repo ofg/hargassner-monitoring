@@ -8,7 +8,7 @@ Internet Gateway __AND__ you have to have an account for Hargassner WEB-APP / AP
 
 # System Deployment
 
-![Deployment](./imgs/deployment.png)
+![Deployment](./imgs/deployment.drawio.png)
 
 * Hargassner heating installation with Internet Gateway sends data to Hargassner web service
 * Python code  of `hargassner_web_api_pull` retrieves data and stores it into InfluxDB
