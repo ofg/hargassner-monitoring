@@ -44,9 +44,10 @@ server __and__ you have an account for [Hargassner WEB-APP](https://web.hargassn
 
 * Rename `config_template.yml` to `config.yml` and fill in required information
 * Install dependencies with `poetry install`
-* Execute:
+* Execute options:
   * Single run: execute `poetry run python hargassner_web_api_pull/hg_data_pull.py`
-  * Run it in a shell-loop every two minutes: `./pull_data.sh`
+  * Run it in a shell-loop every minute: `./pull_data.sh`
+  * Use [crontab](https://linuxize.com/post/scheduling-cron-jobs-with-crontab/) to run it regularly as long as system is up
 
 ## View data with Grafana
 
