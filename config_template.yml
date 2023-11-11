@@ -1,6 +1,8 @@
 
-
-# may be either DEBUG, INFO, WARNING, ERROR, CRITICAL
+# Defines log level for the console handler.
+# If NOT defined, nothing will be logged to console.
+# May be either DEBUG, INFO, WARNING, ERROR, CRITICAL
+# NOTE: Verbose logging to rotating file is not affected by this setting.
 log_level: DEBUG
 
 hargassner_web:

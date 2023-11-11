@@ -42,7 +42,7 @@ this procedure:
 
 # Status value mappings
 
-Defines the mapping of the string values for the status into numeric values for InfluxDB
+Defines the mapping of the state string values into numeric values for InfluxDB.
 
 ### Heating Boiler (Heizungskessel) states
 

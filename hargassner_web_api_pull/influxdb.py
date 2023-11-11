@@ -2,9 +2,11 @@
 
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
-import logging
 import string
 import re
+
+import log
+logger = log.getGlobalLogger()
 
 class influxDB:
 
@@ -31,11 +33,11 @@ class influxDB:
         bucketsApi = self.client.buckets_api()
         b = bucketsApi.find_bucket_by_name(self.bucketName)
         if b == None:
-            logging.info(f"No bucket with name {self.bucketName} found")
+            logger.info(f"No bucket with name {self.bucketName} found")
             b = bucketsApi.create_bucket(bucket_name=self.bucketName, description=self.bucketDescription, org=self.org)
-            logging.info(f'Created bucket "{b.name}" with id "{b.id}", retention policy "{b.retention_rules}"')
+            logger.info(f'Created bucket "{b.name}" with id "{b.id}", retention policy "{b.retention_rules}"')
         else:
-            logging.debug(f"Found bucket '{b.name}' with id '{b.id}'")
+            logger.debug(f"Found bucket '{b.name}' with id '{b.id}'")
         self.bucket = b
         return b
     
@@ -47,7 +49,7 @@ class influxDB:
         chars = chars + " "
         newStr = re.sub('['+chars+']', '_', str)
         if str != newStr:
-            logging.debug(f'Replaced string "{str}" with "{newStr}')
+            logger.debug(f'Replaced string "{str}" with "{newStr}')
         return newStr
 
 
@@ -72,7 +74,7 @@ class influxDB:
             influxMeasurement['tags'] = tags
             influxMeasurement['fields'] = subsys['values']
             influxMeasurement['time'] = timestamp
-            logging.debug(f'Data for writing: {influxMeasurement}')
+            logger.debug(f'Data for writing: {influxMeasurement}')
             writeApi.write(self.bucketName, self.org, influxMeasurement, write_precision = 'ms')
             writeApi.flush()
 

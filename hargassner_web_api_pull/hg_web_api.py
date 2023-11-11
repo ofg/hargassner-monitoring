@@ -1,8 +1,10 @@
 # (c) 2023, Oliver Graebner, oliver.graebner@zohomail.eu
 
 import requests
-import logging
 import json
+
+import log
+logger = log.getGlobalLogger()
 
 class hgWebApi:
 
@@ -33,15 +35,15 @@ class hgWebApi:
         """
         r = requests.post(f'{self.url}/api/auth/login', json={"email":self.email,"password":self.password,"client_id":str(self.client_id),"client_secret":self.client_secret})
         if r.status_code == 200:
-            logging.debug(f'Logged into {self.url}')
+            logger.debug(f'Logged into {self.url}')
             if r.json()['token_type'] != "Bearer":
                 tokenType = r.json()['token_type']
-                logging.error(f'Received token type {tokenType} instead of "Bearer"')
+                logger.error(f'Received token type {tokenType} instead of "Bearer"')
                 raise Exception(f'Received token type {tokenType} instead of "Bearer"')
             self.accessToken = r.json()['access_token']
             self.refreshToken = r.json()['refresh_token']
             self.expiresIn = r.json()['expires_in']
-            logging.debug(f'Received access and refresh token for {self.url}, token expires in {self.expiresIn}')
+            logger.debug(f'Received access and refresh token for {self.url}, token expires in {self.expiresIn}')
             
         else:
             raise Exception(f'Failed to log into {self.url}: status code is {r.status_code}')
@@ -55,7 +57,7 @@ class hgWebApi:
             headers = self.__getHeaders()
         )
         if r.status_code == 200:
-            logging.debug(f'Received list of installations from server:')
+            logger.debug(f'Received list of installations from server:')
             installations = list()
             for installation in r.json()['data']:
                 item = dict()
@@ -63,7 +65,7 @@ class hgWebApi:
                 item['slug'] = installation['slug']
                 item['name'] = installation['name']
                 installations.append(item)
-                logging.debug(f"{len(installations)} - {item['name']}, {item['id']}, {item['slug']}")
+                logger.debug(f"{len(installations)} - {item['name']}, {item['id']}, {item['slug']}")
             return installations
         else:
             raise Exception(f'Failed to retrieve installations for user: status code is {r.stats_code}')
@@ -82,11 +84,11 @@ class hgWebApi:
         )
         if r.status_code == 200:
             data = json.dumps(r.json())
-            logging.debug(f'Data received for {installation["name"]}: {data}')
+            logger.debug(f'Data received for {installation["name"]}: {data}')
             return r.json()
 
         else:
-            logging.error('Failed to pull data from web api, status code is {r.status_code}')
+            logger.error('Failed to pull data from web api, status code is {r.status_code}')
             raise Exception('Failed to pull data from web api, status code is {r.status_code}')
         
     def convertStateValues(self, stateName : str) -> int:
@@ -116,9 +118,9 @@ class hgWebApi:
             case 'STATE_REDUCTION_TRANSITION':
                 x = 21
             case _:
-                logging.warn(f'No numeric state matching defined for string {stateName}')
+                logger.warn(f'No numeric state matching defined for string {stateName}')
                 x = -1
-        logging.info(f'Mapping state value from {stateName} to {x}')
+        logger.info(f'Mapping state value from {stateName} to {x}')
         return x
 
 
@@ -136,7 +138,7 @@ class hgWebApi:
             # Name element has already been handled!
             if k != "name" and k != "device_type":
                 if v == None:
-                    logging.info(f'Dropping key {k} as value is None')
+                    logger.info(f'Dropping key {k} as value is None')
                 elif isinstance(v, bool):
                     if v:
                         values[k] = 1
@@ -150,13 +152,13 @@ class hgWebApi:
                     if k == 'state':
                         values[k] = self.convertStateValues(v)
                     else:
-                        logging.info(f'Dropping key {k} as value is a string: {v}')
+                        logger.info(f'Dropping key {k} as value is a string: {v}')
                 else:
                     values[k] = v
         if len(values) <= 0:
             raise Exception("Failed to get values for widget: " + json.dumps(widget))
         else:
-            logging.debug(f"Extracted widget values: {values}")
+            logger.debug(f"Extracted widget values: {values}")
 
         return values
     
@@ -178,7 +180,7 @@ class hgWebApi:
         if name == None or name == "":
             raise Exception("Failed to get name for widget: " + json.dumps(widget))
         else:
-            logging.debug(f"Extracted widget name is {name}")
+            logger.debug(f"Extracted widget name is {name}")
         
         return name
     
