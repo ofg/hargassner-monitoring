@@ -11,6 +11,12 @@ are used as tags.
 * Verbose logging into rotating files (5 files, max 10 MB per file)
 * Console log level can be configured via configuration file
 
+## Visualization of Data
+
+![Heating Monitoring](./imgs/monitoring_1.png)
+
+![Solar Plant Monitoring](./imgs/monitoring_2.png)
+
 
 # Preconditions
 
@@ -20,6 +26,8 @@ server __and__ you have an account for [Hargassner WEB-APP](https://web.hargassn
   * [Python 3](https://www.python.org/)
   * [Poetry](https://python-poetry.org/)
   * [InfluxDB V2](https://www.influxdata.com/)
+* Required SW for viewing data:
+  * [Grafana](https://grafana.com/)
 
 
 # Functional Building Blocks
@@ -32,23 +40,18 @@ server __and__ you have an account for [Hargassner WEB-APP](https://web.hargassn
 
 # Usage
 
+## Pull data from Hargassner Web
+
 * Rename `config_template.yml` to `config.yml` and fill in required information
 * Install dependencies with `poetry install`
 * Execute:
   * Single run: execute `poetry run python hargassner_web_api_pull/hg_data_pull.py`
   * Run it in a shell-loop every two minutes: `./pull_data.sh`
 
-## In case you get 401 during Hargassner login and you are sure that user / password are correct
+## View data with Grafana
 
-To log into the Hargassner web API one also needs `client_id` and `client_secret`. This is configured
-in `config.yml` and usually does not need to be changed. If you think you need to change it, follow
-this procedure:
-
-1. Open https://web.hargassner.at in browser
-2. Open the network analysis console of the browser (F12 in Firefox, tab "Network analysis")
-3. Log into the web application with your user / password
-4. Find the `POST https://web.hargassner.at/api/auth/login` call in the trace
-5. Switch to the `Request` tab, copy values from the variables `client_id` and `client_secret`
+* Add InfluxDB instance as data source to Grafana
+* Import dashboard provided in `grafana` directory
 
 
 # Status value mappings
@@ -86,4 +89,18 @@ Defines the mapping of the state string values into numeric values for InfluxDB.
 | State name | German meaning | Numberic value |
 | --- | --- | --- |
 | STATE_OFF | Aus | 0 |
+
+# Error Handling
+
+## In case you get 401 during Hargassner login and you are sure that user / password are correct
+
+To log into the Hargassner web API one also needs `client_id` and `client_secret`. This is configured
+in `config.yml` and usually does not need to be changed. If you think you need to change it, follow
+this procedure:
+
+1. Open https://web.hargassner.at in browser
+2. Open the network analysis console of the browser (F12 in Firefox, tab "Network analysis")
+3. Log into the web application with your user / password
+4. Find the `POST https://web.hargassner.at/api/auth/login` call in the trace
+5. Switch to the `Request` tab, copy values from the variables `client_id` and `client_secret`
 
