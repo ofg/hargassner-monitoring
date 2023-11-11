@@ -3,14 +3,17 @@ Monitoring of Hargassner heating while pulling data from Hargassner Web-API.
 
 # Preconditions
 
-* Data of your Hargassner heating installation has to be send to Hargassner via an 
-Internet Gateway __AND__ you have to have an account for Hargassner WEB-APP / APP.
-* Have [Required SW](#required-sw) installed.
-* Access to an InfluxDB instance.
+* Hargassner heating installation sends data vie its Internet Gateway to Hargassner
+server __and__ you have an account for [Hargassner WEB-APP](https://web.hargassner.at) / APP.
+* Required SW for pulling data:
+  * [Python 3](https://www.python.org/)
+  * [Poetry](https://python-poetry.org/)
+  * [InfluxDB V2](https://www.influxdata.com/)
 
-# System Deployment
 
-![Deployment](./imgs/deployment.drawio.png)
+# Functional Building Blocks
+
+![Functional Building Blocks](./imgs/fbb.drawio.png)
 
 * Hargassner heating installation with Internet Gateway sends data to Hargassner web service
 * Python code  of `hargassner_web_api_pull` retrieves data and stores it into InfluxDB
@@ -34,31 +37,7 @@ this procedure:
 2. Open the network analysis console of the browser (F12 in Firefox, tab "Network analysis")
 3. Log into the web application with your user / password
 4. Find the `POST https://web.hargassner.at/api/auth/login` call in the trace
-5. Switch to the `Request` tab copy values from the variables `client_id` and `client_secret`
-
-
-
-# Required SW
-
-* Python 3
-* Poetry
-* InfluxDB V2: I used the [manual installation option](https://docs.influxdata.com/influxdb/v2/install/?t=Linux#manually-download-and-install-the-influxd-binary), for development. For production data
-you should consider a different setup!
-
-## InfluxDB
-
-Configuration of development instance:
-
-1. Start Influx DB
-2. Open [Web-UI](http://localhost:8086) 
-3. Create initial configuration with `user`, `password`, `org name`, `bucket name`
-4. Save `Operator API Token` for later use.
-
-
-
-## Poetry
-
-Refer to [documentation for basic Poetry usage](https://python-poetry.org/docs/basic-usage/)
+5. Switch to the `Request` tab, copy values from the variables `client_id` and `client_secret`
 
 
 # Status value mappings
