@@ -1,6 +1,17 @@
 # hargassner-monitoring
 Monitoring of Hargassner heating while pulling data from Hargassner Web-API.
 
+## Features
+* Pulls data from Hargassner Web-API
+* Configuration of credentials for Hargassner Web-API or InfluxDB via YMAL configuraton file
+* Extracts widget names and values automatically and stores them into InluxDB: The 
+widget name serves as measurement name in InfluxDB and the installation information (ID, name, slug)
+are used as tags.
+* Maps state names to numerical values for persitance with InfluxDB, see [Status value mappings](#status-value-mappings)
+* Verbose logging into rotating files (5 files, max 10 MB per file)
+* Console log level can be configured via configuration file
+
+
 # Preconditions
 
 * Hargassner heating installation sends data vie its Internet Gateway to Hargassner
