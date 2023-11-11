@@ -7,14 +7,18 @@ Monitoring of Hargassner heating while pulling data from Hargassner Web-API.
 * Extracts widget names and values automatically and stores them into InluxDB: The 
 widget name serves as measurement name in InfluxDB and the installation information (ID, name, slug)
 are used as tags.
-* Maps state names to numerical values for persitance with InfluxDB, see [Status value mappings](#status-value-mappings)
+* [Maps state names to numerical values](#status-value-mappings) for persitance with InfluxDB
 * Verbose logging into rotating files (5 files, max 10 MB per file)
 * Console log level can be configured via configuration file
 
 ## Visualization of Data
 
+Exaple dashboard can be found in `grafana` folder.
+
+Visualization of heating boiler and buffer values:
 ![Heating Monitoring](./imgs/monitoring_1.png)
 
+Visualization of solar plant values:
 ![Solar Plant Monitoring](./imgs/monitoring_2.png)
 
 
