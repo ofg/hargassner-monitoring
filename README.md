@@ -10,6 +10,7 @@ are used as tags.
 * [Maps state names to numerical values](#status-value-mappings) for persitance with InfluxDB
 * Verbose logging into rotating files (5 files, max 10 MB per file)
 * Console log level can be configured via configuration file
+* [May cache token to avoid reate limiting of POST login request](./FEATURES.md#token-caching-to-mitigate-rate-limiting)
 
 ## Visualization of Data
 

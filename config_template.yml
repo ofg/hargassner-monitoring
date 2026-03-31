@@ -12,6 +12,8 @@ hargassner_web:
   # don't change the next two lines EXCEPT if you have read and understood README 
   client_id: 1
   client_secret: "aSYsAYj7Gsl5v9tPEDdS1hhXTUezgJk1NhOZ1bHR"
+  # If true, the access token is cached in token-cache.json to avoid hitting the rate limit on login
+  cache_token: false
 
 influxdb:
   url: "http://localhost:8086"

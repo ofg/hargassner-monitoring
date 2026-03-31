@@ -2,6 +2,8 @@
 
 import requests
 import json
+import os
+from datetime import datetime, timezone, timedelta
 
 import log
 logger = log.getGlobalLogger()
@@ -18,9 +20,54 @@ class hgWebApi:
         self.password = config['password']
         self.client_id = config['client_id']
         self.client_secret = config['client_secret']
+        self.cache_token = config.get('cache_token', False)
         self.accessTokon = None
         self.refreshToken = None
         self.expiresIn = None
+
+    __TOKEN_CACHE_FILE = 'token-cache.json'
+
+    def __loadTokenFromCache(self):
+        """
+        Loads the access token from the token cache file if it exists and is still valid.
+        Returns True if a valid token was loaded, False otherwise.
+        """
+        if not os.path.isfile(self.__TOKEN_CACHE_FILE):
+            logger.debug(f'Token cache file {self.__TOKEN_CACHE_FILE} not found')
+            return False
+            try:
+                with open(self.__TOKEN_CACHE_FILE, 'r') as f:
+                    cache = json.load(f)
+                expires_at = datetime.fromisoformat(cache['expires_at'])
+                threshold = expires_at - timedelta(minutes=10)
+                now = datetime.now(timezone.utc)
+                if now < threshold:
+                    self.accessToken = cache['access_token']
+                    self.refreshToken = cache['refresh_token']
+                    self.expiresIn = cache['expires_in']
+                    logger.debug(f'Loaded valid token from cache, token expires at {expires_at}')
+                    return True
+                else:
+                    logger.debug(f'Cached token is expired or about to expire (expires at {expires_at}), requesting new token')
+                    return False
+            except (json.JSONDecodeError, KeyError, ValueError) as e:
+                logger.warning(f'Ignoring invalid token cache file {self.__TOKEN_CACHE_FILE}: {e}')
+                return False
+
+    def __saveTokenToCache(self):
+        """
+        Saves the current access token to the token cache file.
+        """
+        expires_at = datetime.now(timezone.utc) + timedelta(seconds=self.expiresIn)
+        cache = {
+            'access_token': self.accessToken,
+            'refresh_token': self.refreshToken,
+            'expires_in': self.expiresIn,
+            'expires_at': expires_at.isoformat()
+        }
+        with open(self.__TOKEN_CACHE_FILE, 'w') as f:
+            json.dump(cache, f, indent=4)
+        logger.debug(f'Saved token to cache file {self.__TOKEN_CACHE_FILE}, expires at {expires_at}')
 
     def __getHeaders(self):
         """
@@ -32,7 +79,11 @@ class hgWebApi:
     def connectToServer(self):
         """
         Authenticates against the server with configured username / password and stores access token for subsequent use.
+        If cache_token is enabled, a valid cached token is used instead of logging in again.
         """
+        if self.cache_token and self.__loadTokenFromCache():
+            return
+
         r = requests.post(f'{self.url}/api/auth/login', json={"email":self.email,"password":self.password,"client_id":str(self.client_id),"client_secret":self.client_secret})
         logger.debug(f'Response headers for POST /api/auth/login: {dict(r.headers)}')
 
@@ -46,7 +97,8 @@ class hgWebApi:
             self.refreshToken = r.json()['refresh_token']
             self.expiresIn = r.json()['expires_in']
             logger.debug(f'Received access and refresh token for {self.url}, token expires in {self.expiresIn}')
-            
+            if self.cache_token:
+                self.__saveTokenToCache()
         else:
             raise Exception(f'Failed to log into {self.url}: status code is {r.status_code}')
         
