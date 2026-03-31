@@ -34,6 +34,8 @@ class hgWebApi:
         Authenticates against the server with configured username / password and stores access token for subsequent use.
         """
         r = requests.post(f'{self.url}/api/auth/login', json={"email":self.email,"password":self.password,"client_id":str(self.client_id),"client_secret":self.client_secret})
+        logger.debug(f'Response headers for POST /api/auth/login: {dict(r.headers)}')
+
         if r.status_code == 200:
             logger.debug(f'Logged into {self.url}')
             if r.json()['token_type'] != "Bearer":
@@ -56,6 +58,7 @@ class hgWebApi:
             f'{self.url}/api/installations?with=devices.gateway%3Bcreator&sort=name&pageSize=100&page=1',
             headers = self.__getHeaders()
         )
+        logger.debug(f'Response headers for GET /api/installations: {dict(r.headers)}')
         if r.status_code == 200:
             logger.debug(f'Received list of installations from server:')
             installations = list()
