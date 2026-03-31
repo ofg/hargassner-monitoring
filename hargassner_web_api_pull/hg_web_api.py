@@ -35,24 +35,24 @@ class hgWebApi:
         if not os.path.isfile(self.__TOKEN_CACHE_FILE):
             logger.debug(f'Token cache file {self.__TOKEN_CACHE_FILE} not found')
             return False
-            try:
-                with open(self.__TOKEN_CACHE_FILE, 'r') as f:
-                    cache = json.load(f)
-                expires_at = datetime.fromisoformat(cache['expires_at'])
-                threshold = expires_at - timedelta(minutes=10)
-                now = datetime.now(timezone.utc)
-                if now < threshold:
-                    self.accessToken = cache['access_token']
-                    self.refreshToken = cache['refresh_token']
-                    self.expiresIn = cache['expires_in']
-                    logger.debug(f'Loaded valid token from cache, token expires at {expires_at}')
-                    return True
-                else:
-                    logger.debug(f'Cached token is expired or about to expire (expires at {expires_at}), requesting new token')
-                    return False
-            except (json.JSONDecodeError, KeyError, ValueError) as e:
-                logger.warning(f'Ignoring invalid token cache file {self.__TOKEN_CACHE_FILE}: {e}')
+        try:
+            with open(self.__TOKEN_CACHE_FILE, 'r') as f:
+                cache = json.load(f)
+            expires_at = datetime.fromisoformat(cache['expires_at'])
+            threshold = expires_at - timedelta(minutes=10)
+            now = datetime.now(timezone.utc)
+            if now < threshold:
+                self.accessToken = cache['access_token']
+                self.refreshToken = cache['refresh_token']
+                self.expiresIn = cache['expires_in']
+                logger.debug(f'Loaded valid token from cache, token expires at {expires_at}')
+                return True
+            else:
+                logger.debug(f'Cached token is expired or about to expire (expires at {expires_at}), requesting new token')
                 return False
+        except (json.JSONDecodeError, KeyError, ValueError) as e:
+            logger.warning(f'Ignoring invalid token cache file {self.__TOKEN_CACHE_FILE}: {e}')
+            return False
 
     def __saveTokenToCache(self):
         """
